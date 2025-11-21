@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Toolkit - An toàn Thông tin</title>
+
+    <link rel="stylesheet" href="styles.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/3.3.2/jsencrypt.min.js"></script>
+
+    <script src="script.js" defer></script>
+</head>
+<body>
+   <div class="container">
+        <header>
+            <h1>Security Toolkit</h1>
+            <p> Công cụ An toàn Thông tin - Hello thầy đẹp trai👋</p>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="nav-btn active" onclick="showTool('hash')"> Hash Functions</button>
+            <button class="nav-btn" onclick="showTool('aes')"> Mã hóa AES</button>
+            <button class="nav-btn" onclick="showTool('rsa')"> Mã hóa RSA</button>
+            <button class="nav-btn" onclick="showTool('signature')"> Chữ ký số</button>
+            <button class="nav-btn" onclick="showTool('otp')"> OTP/2FA</button>
+            <button class="nav-btn" onclick="showTool('blockchain')"> Blockchain</button>
+        </div>
+
+        <!-- 1. HASH FUNCTIONS -->
+        <div id="hash" class="tool-section active">
+            <h2> Hàm Băm (Hash Functions)</h2>
+            <div class="input-group">
+                <label>Nhập dữ liệu cần băm:</label>
+                <textarea id="hashInput" placeholder="Nhập text hoặc dữ liệu..."></textarea>
+            </div>
+            <div class="input-group">
+                <label>Chọn thuật toán:</label>
+                <select id="hashAlgo">
+                    <option value="MD5">MD5</option>
+                    <option value="SHA1">SHA-1</option>
+                    <option value="SHA256" selected>SHA-256</option>
+                    <option value="SHA512">SHA-512</option>
+                </select>
+            </div>
+            <button class="btn" onclick="generateHash()">Tạo Hash</button>
+            <div class="output" id="hashOutput">Kết quả sẽ hiển thị ở đây...</div>
+        </div>
+
+        <!-- 2. AES ENCRYPTION -->
+        <div id="aes" class="tool-section">
+            <h2>Mã hóa Đối xứng AES</h2>
+            <div class="input-group">
+                <label>Nhập plaintext:</label>
+                <textarea id="aesPlaintext" placeholder="Dữ liệu cần mã hóa..."></textarea>
+            </div>
+            <div class="input-group">
+                <label>Khóa bí mật (Secret Key):</label>
+                <input type="text" id="aesKey" placeholder="Ví dụ: mySecretKey123">
+            </div>
+            <button class="btn" onclick="aesEncrypt()">Mã hóa</button>
+            <button class="btn" onclick="aesDecrypt()">Giải mã</button>
+            <div class="output" id="aesOutput">Kết quả sẽ hiển thị ở đây...</div>
+        </div>
+
+        <!-- 3. RSA ENCRYPTION -->
+        <div id="rsa" class="tool-section">
+            <h2> Mã hóa Bất đối xứng RSA</h2>
+            <button class="btn" onclick="generateRSAKeys()">Tạo cặp khóa RSA</button>
+            <div class="grid-2">
+                <div class="input-group">
+                    <label>Public Key:</label>
+                    <textarea id="rsaPublicKey" readonly placeholder="Khóa công khai..."></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Private Key:</label>
+                    <textarea id="rsaPrivateKey" readonly placeholder="Khóa riêng..."></textarea>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Nhập plaintext:</label>
+                <textarea id="rsaPlaintext" placeholder="Dữ liệu cần mã hóa..."></textarea>
+            </div>
+            <button class="btn" onclick="rsaEncrypt()">Mã hóa (Public Key)</button>
+            <button class="btn" onclick="rsaDecrypt()">Giải mã (Private Key)</button>
+            <div class="output" id="rsaOutput">Kết quả sẽ hiển thị ở đây...</div>
+        </div>
+
+        <!-- 4. DIGITAL SIGNATURE -->
+        <div id="signature" class="tool-section">
+            <h2> Chữ ký Số (Digital Signature)</h2>
+            <button class="btn" onclick="generateSignKeys()">Tạo cặp khóa</button>
+            <div class="input-group">
+                <label>Nhập dữ liệu cần ký:</label>
+                <textarea id="signData" placeholder="Văn bản cần ký..."></textarea>
+            </div>
+            <button class="btn" onclick="signData()">Ký (Private Key)</button>
+            <button class="btn" onclick="verifySignature()">Xác thực (Public Key)</button>
+            <div class="output" id="signOutput">Kết quả sẽ hiển thị ở đây...</div>
+        </div>
+
+        <!-- 5. OTP/2FA -->
+        <div id="otp" class="tool-section">
+            <h2> OTP / Two-Factor Authentication</h2>
+            <div class="input-group">
+                <label>Nhập secret key (hoặc để trống tự động tạo):</label>
+                <input type="text" id="otpSecret" placeholder="Ví dụ: JBSWY3DPEHPK3PXP">
+            </div>
+            <button class="btn" onclick="generateOTP()">Tạo OTP (6 chữ số)</button>
+            <div class="output" id="otpOutput">OTP sẽ hiển thị ở đây...</div>
+            <div class="input-group" style="margin-top: 20px;">
+                <label>Xác thực OTP:</label>
+                <input type="text" id="otpVerify" placeholder="Nhập mã OTP 6 chữ số">
+            </div>
+            <button class="btn" onclick="verifyOTP()">Xác thực</button>
+            <div class="output" id="otpVerifyOutput"></div>
+        </div>
+        <!-- 6. BLOCKCHAIN -->
+        <div id="blockchain" class="tool-section">
+            <h2> Blockchain Demo</h2>
+            <div class="input-group">
+                <label>Dữ liệu block mới:</label>
+                <input type="text" id="blockData" placeholder="Ví dụ: Transaction 1">
+            </div>
+            <button class="btn" onclick="addBlock()">Thêm Block</button>
+            <button class="btn" onclick="validateChain()">Kiểm tra tính hợp lệ</button>
+            <div id="chainOutput"></div>
+        </div>
+    </div>
+</body>
+</html>
